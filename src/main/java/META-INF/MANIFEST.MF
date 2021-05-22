@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: com.viral32111.sethome.SetHome
-
