@@ -3,7 +3,7 @@
 
 # Basic information
 name: SetHome
-description: Lets players create home points then teleport to them at a later date.
+description: Lets players easily teleport back to their respawn points.
 version: 0.1.0
 
 # My information
@@ -17,46 +17,19 @@ prefix: SetHome
 
 # Chat commands
 commands:
-    sethome:
-        aliases: [sh, shome]
-        description: Create a home point at your current location.
-        permission: sethome.create
-        permission-message: Sorry, you cannot use this command!
-        usage: "/<command> <name>"
-    delhome:
-        aliases: [dh, dhome]
-        description: Delete a previously created home point.
-        permission: sethome.delete
-        permission-message: Sorry, you cannot use this command!
-        usage: "/<command> <name>"
-    home:
-        description: Teleport to a previously created home point.
-        permission: sethome.teleport
-        permission-message: Sorry, you cannot use this command!
-        usage: "/<command> <name>"
     bed:
-        description: Teleport to your bed, only works in the Overworld.
+        description: Teleport to your bed in the Overworld.
         permission: sethome.bed
         permission-message: Sorry, you cannot use this command!
         usage: "/<command>"
     anchor:
-        aliases: [anc]
-        description: Teleport to your respawn anchor, only works in the Nether.
+        description: Teleport to your respawn anchor in the Nether.
         permission: sethome.anchor
         permission-message: Sorry, you cannot use this command!
         usage: "/<command>"
 
 # Permission nodes
 permissions:
-    sethome.create:
-        description: Allows a player to create a new named home point at their current location.
-        default: true
-    sethome.delete:
-        description: Allows a player to delete a previously created home point.
-        default: true
-    sethome.teleport:
-        description: Allows a player to teleport to a previously created home point.
-        default: true
     sethome.bed:
         description: Allows a player to teleport to their bed in the Overworld.
         default: true

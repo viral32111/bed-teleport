@@ -1,17 +1,13 @@
 // The package this file is a part of
 package com.viral32111.sethome;
 
-// Import syntax annotations
+// Import required classes
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
-
-// Import the base Bukkit plugin class
 import org.bukkit.plugin.java.JavaPlugin;
-
-// Import chat command classes
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-
-// Import player class
 import org.bukkit.entity.Player;
 
 // The main entry point class
@@ -24,8 +20,26 @@ public class SetHome extends JavaPlugin {
 		// Copy the default configuration into the plugin's folder
 		saveDefaultConfig();
 
+		// Setup event handlers
+		getServer().getPluginManager().registerEvents( new SetHomeListener(), this );
+
+		/*
+		ConfigurationSection experienceConfig = getConfig().getConfigurationSection( "experience" );
+		ConfigurationSection experienceScaleConfig = experienceConfig.getConfigurationSection( "scale" );
+		ConfigurationSection bedConfig = getConfig().getConfigurationSection( "bed" );
+		ConfigurationSection respawnAnchor = getConfig().getConfigurationSection( "respawn-anchor" );
+
+		getLogger().info( "experience.enabled = " + experienceConfig.getBoolean( "enabled" ) );
+		getLogger().info( "experience.amount = " + experienceConfig.getInt( "amount" ) );
+		getLogger().info( "experience.scale.enabled = " + experienceScaleConfig.getBoolean( "enabled" ) );
+		getLogger().info( "experience.scale.factor = " + experienceScaleConfig.getDouble( "factor" ) );
+		getLogger().info( "bed.full-sleep = " + bedConfig.getBoolean( "full-sleep" ) );
+		getLogger().info( "respawn-anchor.use-charge = " + respawnAnchor.getBoolean( "use-charge" ) );
+		getLogger().info( "respawn-anchor.charge-amount = " + respawnAnchor.getInt( "charge-amount" ) );
+		*/
+
 		// Print a startup message in the console
-		getLogger().info( "Successfully loaded!" );
+		//getLogger().info( "Successfully loaded!" );
 
 	}
 
@@ -34,7 +48,7 @@ public class SetHome extends JavaPlugin {
 	public void onDisable() {
 
 		// Print a shutdown message in the console
-		getLogger().info( "Goodbye." );
+		//getLogger().info( "Goodbye." );
 
 	}
 
@@ -49,36 +63,6 @@ public class SetHome extends JavaPlugin {
 		}
 
 		Player player = ( Player ) sender;
-
-		if ( command.getName().equalsIgnoreCase( "sethome" ) && player.hasPermission( "sethome.create" ) ) {
-			if ( arguments.length <= 0 ) {
-				player.sendMessage( "You must specify a name for the home point." );
-				return false;
-			}
-
-			player.sendMessage( "Creating home point " + arguments[ 0 ] + "..." );
-			return true;
-		}
-
-		if ( command.getName().equalsIgnoreCase( "delhome" ) && player.hasPermission( "sethome.delete" ) ) {
-			if ( arguments.length <= 0 ) {
-				player.sendMessage( "You must specify a name for the home point." );
-				return false;
-			}
-
-			player.sendMessage( "Deleting a home point " + arguments[ 0 ] + "..." );
-			return true;
-		}
-
-		if ( command.getName().equalsIgnoreCase( "home" ) && player.hasPermission( "sethome.teleport" ) ) {
-			if ( arguments.length <= 0 ) {
-				player.sendMessage( "You must specify a name for the home point." );
-				return false;
-			}
-
-			player.sendMessage( "Teleporting to home point " + arguments[ 0 ] + "..." );
-			return true;
-		}
 
 		if ( command.getName().equalsIgnoreCase( "bed" ) && player.hasPermission( "sethome.bed" ) ) {
 			player.sendMessage( "Teleporting to your bed..." );
