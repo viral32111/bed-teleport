@@ -3,54 +3,38 @@ package com.viral32111.sethome;
 
 // Import required classes
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.event.EventHandler;
-import org.jetbrains.annotations.NotNull;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 // The main entry point class
 public class SetHome extends JavaPlugin {
+
+	// Globals for config values
+	boolean isExperienceEnabled;
+	boolean isExperienceScaleEnabled;
+	int experienceAmount;
+	double experienceScaleFactor;
 
 	// This event runs whenever the plugin is loaded
 	@Override
 	public void onEnable() {
 
-		// Copy the default configuration into the plugin's folder
+		// Copy the default configuration
 		saveDefaultConfig();
 
-		// Setup event handlers
-		getServer().getPluginManager().registerEvents( new SetHomeListener( this ), this );
-
-		/*
+		// Get configuration values
 		ConfigurationSection experienceConfig = getConfig().getConfigurationSection( "experience" );
 		ConfigurationSection experienceScaleConfig = experienceConfig.getConfigurationSection( "scale" );
-		ConfigurationSection bedConfig = getConfig().getConfigurationSection( "bed" );
-		ConfigurationSection respawnAnchor = getConfig().getConfigurationSection( "respawn-anchor" );
-
-		getLogger().info( "experience.enabled = " + experienceConfig.getBoolean( "enabled" ) );
-		getLogger().info( "experience.amount = " + experienceConfig.getInt( "amount" ) );
-		getLogger().info( "experience.scale.enabled = " + experienceScaleConfig.getBoolean( "enabled" ) );
-		getLogger().info( "experience.scale.factor = " + experienceScaleConfig.getDouble( "factor" ) );
-		getLogger().info( "bed.full-sleep = " + bedConfig.getBoolean( "full-sleep" ) );
-		getLogger().info( "respawn-anchor.use-charge = " + respawnAnchor.getBoolean( "use-charge" ) );
-		getLogger().info( "respawn-anchor.charge-amount = " + respawnAnchor.getInt( "charge-amount" ) );
-		*/
-
-		// Print a startup message in the console
-		//getLogger().info( "Successfully loaded!" );
-
-	}
-
-	// This event runs whenever the plugin is unloaded
-	@Override
-	public void onDisable() {
-
-		// Print a shutdown message in the console
-		//getLogger().info( "Goodbye." );
+		isExperienceEnabled = experienceConfig.getBoolean( "enabled" );
+		isExperienceScaleEnabled = experienceScaleConfig.getBoolean( "enabled" );
+		experienceAmount = experienceConfig.getInt( "amount" );
+		experienceScaleFactor = experienceScaleConfig.getDouble( "factor" );
 
 	}
 
@@ -64,34 +48,69 @@ public class SetHome extends JavaPlugin {
 			return false;
 		}
 
+		// Cast sender to player
 		Player player = ( Player ) sender;
 
+		// Is this the /bed command?
 		if ( command.getName().equalsIgnoreCase( "bed" ) && player.hasPermission( "sethome.bed" ) ) {
 
+			// Don't continue if the player isn't in the Overworld
 			if ( player.getWorld().getEnvironment() != World.Environment.NORMAL ) {
 				player.sendMessage( "You can only return to your bed when in the Overworld." );
 				return true;
 			}
 
+			// Get the player's bed spawn location
 			Location respawnPointLocation = player.getBedSpawnLocation();
 
+			// Don't continue if their bed is missing or obstructed
 			if ( respawnPointLocation == null ) {
 				player.sendMessage( "You have no bed or it is obstructed!" );
 				getLogger().info( player.getName() + " attempted to teleport back to their bed, but it is missing or obstructed." );
 				return true;
 			}
 
+			// If experience is enabled, don't continue if the player doesn't have enough experience, if they do then subtract it
+			if ( isExperienceEnabled ) {
+				int experience = player.getLevel() ^ 2 + 6 * player.getLevel(); // https://minecraft.fandom.com/wiki/Experience#Leveling_up
+
+				ExperienceManager playerExperience = new ExperienceManager( player );
+				System.out.println( playerExperience.getTotalExperience() );
+
+				if ( isExperienceScaleEnabled ) {
+					double distanceToBed = respawnPointLocation.distance( player.getLocation() );
+					System.out.println( distanceToBed );
+
+					if ( playerExperience.getTotalExperience() < ( distanceToBed * experienceScaleFactor ) ) {
+						player.sendMessage( "You do not have enough experience to teleport back to your bed!" );
+						getLogger().info( player.getName() + " attempted to teleport back to their bed, but they do not have enough experience." );
+						return true;
+					} else {
+						// Subtract experience here
+						player.playSound( player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f );
+					}
+				} else {
+					if ( playerExperience.getTotalExperience() < experienceAmount ) {
+						player.sendMessage( "You do not have enough experience to teleport back to your bed!" );
+						getLogger().info( player.getName() + " attempted to teleport back to their bed, but they do not have enough experience." );
+						return true;
+					} else {
+						player.giveExp( -experienceAmount );
+						player.playSound( player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f );
+					}
+				}
+			}
+
+			// Teleport the player to their bed
 			player.teleport( respawnPointLocation );
 			player.sendMessage( "You have teleported back to your bed." );
-			getLogger().info( player.getName() + " has teleported back to their bed at " + respawnPointLocation.toString() );
+			getLogger().info( player.getName() + " has teleported back to their bed at [ " + respawnPointLocation.getX() + ", " + respawnPointLocation.getY() + ", " + respawnPointLocation.getZ() + " ]" );
 
 			return true;
 
 		}
 
-		// Code respawn anchor functionality for a future version
-
-		/*
+		/* Code respawn anchor functionality for a future version
 		if ( command.getName().equalsIgnoreCase( "anchor" ) && player.hasPermission( "sethome.anchor" ) ) {
 
 			if ( player.getWorld().getEnvironment() != World.Environment.NETHER ) {

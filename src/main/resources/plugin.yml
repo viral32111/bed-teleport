@@ -1,9 +1,6 @@
-# Spigot: https://www.spigotmc.org/wiki/plugin-yml/
-# Paper: https://papermc.io/javadocs/paper/1.16/org/bukkit/plugin/PluginDescriptionFile.html
-
 # Basic information
 name: SetHome
-description: Lets players easily teleport back to their respawn points.
+description: Lets players easily teleport back to their respawn point.
 version: 0.1.0
 
 # My information
@@ -22,17 +19,17 @@ commands:
         permission: sethome.bed
         permission-message: Sorry, you cannot use this command!
         usage: "/<command>"
-    anchor:
-        description: Teleport to your respawn anchor in the Nether.
-        permission: sethome.anchor
-        permission-message: Sorry, you cannot use this command!
-        usage: "/<command>"
+    #anchor:
+    #    description: Teleport to your respawn anchor in the Nether.
+    #    permission: sethome.anchor
+    #    permission-message: Sorry, you cannot use this command!
+    #    usage: "/<command>"
 
 # Permission nodes
 permissions:
     sethome.bed:
         description: Allows a player to teleport to their bed in the Overworld.
         default: true
-    sethome.anchor:
-        description: Allows a player to teleport to their respawn anchor in the Nether.
-        default: true
+    #sethome.anchor:
+    #    description: Allows a player to teleport to their respawn anchor in the Nether.
+    #    default: true
