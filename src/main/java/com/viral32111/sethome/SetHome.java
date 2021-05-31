@@ -2,6 +2,8 @@
 package com.viral32111.sethome;
 
 // Import required classes
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +23,7 @@ public class SetHome extends JavaPlugin {
 		saveDefaultConfig();
 
 		// Setup event handlers
-		getServer().getPluginManager().registerEvents( new SetHomeListener(), this );
+		getServer().getPluginManager().registerEvents( new SetHomeListener( this ), this );
 
 		/*
 		ConfigurationSection experienceConfig = getConfig().getConfigurationSection( "experience" );
@@ -65,14 +67,54 @@ public class SetHome extends JavaPlugin {
 		Player player = ( Player ) sender;
 
 		if ( command.getName().equalsIgnoreCase( "bed" ) && player.hasPermission( "sethome.bed" ) ) {
-			player.sendMessage( "Teleporting to your bed..." );
+
+			if ( player.getWorld().getEnvironment() != World.Environment.NORMAL ) {
+				player.sendMessage( "You can only return to your bed when in the Overworld." );
+				return true;
+			}
+
+			Location respawnPointLocation = player.getBedSpawnLocation();
+
+			if ( respawnPointLocation == null ) {
+				player.sendMessage( "You have no bed or it is obstructed!" );
+				getLogger().info( player.getName() + " attempted to teleport back to their bed, but it is missing or obstructed." );
+				return true;
+			}
+
+			player.teleport( respawnPointLocation );
+			player.sendMessage( "You have teleported back to your bed." );
+			getLogger().info( player.getName() + " has teleported back to their bed at " + respawnPointLocation.toString() );
+
 			return true;
+
 		}
 
+		// Code respawn anchor functionality for a future version
+
+		/*
 		if ( command.getName().equalsIgnoreCase( "anchor" ) && player.hasPermission( "sethome.anchor" ) ) {
-			player.sendMessage( "Teleporting to your respawn anchor..." );
+
+			if ( player.getWorld().getEnvironment() != World.Environment.NETHER ) {
+				player.sendMessage( "You can only return to your respawn anchor when in the Nether." );
+				return true;
+			}
+
+			Location respawnAnchorLocation = player. GET RESPAWN ANCHOR LOCATION ??
+
+			if ( respawnAnchorLocation == null ) { // Check if it is charged here too
+				player.sendMessage( "You have no charged respawn anchor!" );
+				getLogger().info( player.getName() + " attempted to teleport back to their respawn anchor, but it is missing, obstructed or not charged." );
+				return true;
+			}
+
+			player.teleport( respawnAnchorLocation );
+			player.sendMessage( "You have teleported back to your respawn anchor." );
+			getLogger().info( player.getName() + " has teleported back to their respawn anchor at " + respawnAnchorLocation.toString() );
+
 			return true;
+
 		}
+		*/
 
 		return false;
 	}
