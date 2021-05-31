@@ -9,7 +9,7 @@ experience:
 
     # The amount of experience that will be consumed on teleport.
     # If a player has less than this amount, they will not be able to teleport.
-    amount: 5
+    amount: 6
 
     # The configuration for distance-based experience usage
     scale:

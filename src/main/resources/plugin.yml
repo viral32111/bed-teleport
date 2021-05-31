@@ -19,17 +19,9 @@ commands:
         permission: sethome.bed
         permission-message: Sorry, you cannot use this command!
         usage: "/<command>"
-    #anchor:
-    #    description: Teleport to your respawn anchor in the Nether.
-    #    permission: sethome.anchor
-    #    permission-message: Sorry, you cannot use this command!
-    #    usage: "/<command>"
 
 # Permission nodes
 permissions:
     sethome.bed:
         description: Allows a player to teleport to their bed in the Overworld.
         default: true
-    #sethome.anchor:
-    #    description: Allows a player to teleport to their respawn anchor in the Nether.
-    #    default: true

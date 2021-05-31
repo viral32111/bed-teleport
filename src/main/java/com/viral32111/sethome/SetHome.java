@@ -21,6 +21,31 @@ public class SetHome extends JavaPlugin {
 	int experienceAmount;
 	double experienceScaleFactor;
 
+	// This calculates the amount of experience a player has
+	// https://minecraft.fandom.com/wiki/Experience#Leveling_up
+	private int getTotalExperienceForPlayer( Player player ) {
+		int level = player.getLevel();
+		double experience;
+
+		if ( level <= 16 ) {
+			experience = Math.pow( level, 2 ) + 6 * level;
+		} else if ( level <= 31 ) {
+			experience = 2.5 * Math.pow( level, 2 ) - 40.5 * level + 360;
+		} else {
+			experience = 4.5 * Math.pow( level, 2 ) - 162.5 * level + 2220;
+		}
+
+		if ( level <= 15 ) {
+			experience += ( 2 * level + 7 ) * player.getExp();
+		} else if ( level <= 30 ) {
+			experience += ( 5 * level - 38 ) * player.getExp();
+		} else {
+			experience += ( 9 * level - 158 ) * player.getExp();
+		}
+
+		return ( int ) Math.ceil( experience );
+	}
+
 	// This event runs whenever the plugin is loaded
 	@Override
 	public void onEnable() {
@@ -45,7 +70,7 @@ public class SetHome extends JavaPlugin {
 		// Do not continue if the console ran the command
 		if ( !( sender instanceof Player ) ) {
 			getLogger().info( "This command is not usable by the console." );
-			return false;
+			return true;
 		}
 
 		// Cast sender to player
@@ -72,25 +97,22 @@ public class SetHome extends JavaPlugin {
 
 			// If experience is enabled, don't continue if the player doesn't have enough experience, if they do then subtract it
 			if ( isExperienceEnabled ) {
-				int experience = player.getLevel() ^ 2 + 6 * player.getLevel(); // https://minecraft.fandom.com/wiki/Experience#Leveling_up
-
-				ExperienceManager playerExperience = new ExperienceManager( player );
-				System.out.println( playerExperience.getTotalExperience() );
+				int currentExperience = getTotalExperienceForPlayer( player );
 
 				if ( isExperienceScaleEnabled ) {
 					double distanceToBed = respawnPointLocation.distance( player.getLocation() );
-					System.out.println( distanceToBed );
+					int experienceRequired = ( int ) Math.round( distanceToBed * experienceScaleFactor );
 
-					if ( playerExperience.getTotalExperience() < ( distanceToBed * experienceScaleFactor ) ) {
+					if ( currentExperience < experienceRequired ) {
 						player.sendMessage( "You do not have enough experience to teleport back to your bed!" );
 						getLogger().info( player.getName() + " attempted to teleport back to their bed, but they do not have enough experience." );
 						return true;
 					} else {
-						// Subtract experience here
+						player.giveExp( -experienceRequired );
 						player.playSound( player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f );
 					}
 				} else {
-					if ( playerExperience.getTotalExperience() < experienceAmount ) {
+					if ( currentExperience < experienceAmount ) {
 						player.sendMessage( "You do not have enough experience to teleport back to your bed!" );
 						getLogger().info( player.getName() + " attempted to teleport back to their bed, but they do not have enough experience." );
 						return true;
@@ -109,31 +131,6 @@ public class SetHome extends JavaPlugin {
 			return true;
 
 		}
-
-		/* Code respawn anchor functionality for a future version
-		if ( command.getName().equalsIgnoreCase( "anchor" ) && player.hasPermission( "sethome.anchor" ) ) {
-
-			if ( player.getWorld().getEnvironment() != World.Environment.NETHER ) {
-				player.sendMessage( "You can only return to your respawn anchor when in the Nether." );
-				return true;
-			}
-
-			Location respawnAnchorLocation = player. GET RESPAWN ANCHOR LOCATION ??
-
-			if ( respawnAnchorLocation == null ) { // Check if it is charged here too
-				player.sendMessage( "You have no charged respawn anchor!" );
-				getLogger().info( player.getName() + " attempted to teleport back to their respawn anchor, but it is missing, obstructed or not charged." );
-				return true;
-			}
-
-			player.teleport( respawnAnchorLocation );
-			player.sendMessage( "You have teleported back to your respawn anchor." );
-			getLogger().info( player.getName() + " has teleported back to their respawn anchor at " + respawnAnchorLocation.toString() );
-
-			return true;
-
-		}
-		*/
 
 		return false;
 	}
