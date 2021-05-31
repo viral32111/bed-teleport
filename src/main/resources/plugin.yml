@@ -1,27 +1,27 @@
 # Basic information
-name: SetHome
-description: Lets players easily teleport back to their respawn point.
-version: 0.1.0
+name: BedTeleport
+description: Lets players teleport back to their bed respawn point.
+version: 1.0.0
 
 # My information
 author: viral32111
 website: https://viral32111.com
 
 # Code things
-main: com.viral32111.sethome.SetHome
+main: com.viral32111.bedteleport.BedTeleport
 api-version: 1.16
-prefix: SetHome
+prefix: BedTeleport
 
 # Chat commands
 commands:
     bed:
         description: Teleport to your bed in the Overworld.
-        permission: sethome.bed
+        permission: bedteleport.bed
         permission-message: Sorry, you cannot use this command!
         usage: "/<command>"
 
 # Permission nodes
 permissions:
-    sethome.bed:
+    bedteleport.bed:
         description: Allows a player to teleport to their bed in the Overworld.
         default: true
