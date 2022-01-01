@@ -4,7 +4,7 @@ Lets players teleport back to their bed respawn point.
 
 ## License
 
-Copyright (C) 2021 [viral32111](https://viral32111.com).
+Copyright (C) 2021-2022 [viral32111](https://viral32111.com).
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
