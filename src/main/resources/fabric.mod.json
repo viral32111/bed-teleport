@@ -1,0 +1,45 @@
+{
+	"schemaVersion": 1,
+
+	"id": "bedteleport",
+	"version": "${ version }",
+
+	"name": "Bed Teleport",
+	"description": "Command to teleport players back to their beds.",
+	"authors": [ {
+		"name": "viral32111",
+		"contact": {
+			"homepage": "https://viral32111.com",
+			"email": "contact@viral32111.com"
+		}
+	} ],
+	"contributors": [],
+	"contact": {
+		"homepage": "https://github.com/viral32111/bed-teleport",
+		"sources": "https://github.com/viral32111/bed-teleport",
+		"issues": "https://github.com/viral32111/bed-teleport/issues"
+	},
+	"license": "AGPL-3.0-only",
+
+	"environment": "server",
+	"entrypoints": {
+		"server": [ {
+			"adapter": "kotlin",
+			"value": "com.viral32111.bedteleport.BedTeleport"
+		} ]
+	},
+	"mixins": [ {
+		"environment": "server",
+		"config": "bedteleport.mixins.json"
+	} ],
+
+	"depends": {
+		"java": ">=${ java }",
+		"minecraft": ">=${ minecraft }",
+		"fabricloader": ">=${ fabricloader }",
+		"fabric-api": ">=${ fabric_api }",
+		"fabric-language-kotlin": ">=${ fabric_language_kotlin }"
+	},
+	"suggests": {}
+
+}

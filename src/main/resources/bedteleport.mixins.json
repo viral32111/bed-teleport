@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "com.viral32111.bedteleport.mixin",
+	"compatibilityLevel": "JAVA_${ java }",
+	"verbose": true,
+	"injectors": {
+		"defaultRequire": 1
+	},
+
+	"mixins": [],
+	"client": [],
+	"server": []
+}
