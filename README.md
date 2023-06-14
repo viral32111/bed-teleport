@@ -1,8 +1,16 @@
 # Bed Teleport
 
-This is a Minecraft mod for [Fabric](https://fabricmc.net/) that adds a `/bed` chat command to teleport players back to their respawn point bed, costing them experience based on distance.
+This is a [Minecraft Fabric](https://fabricmc.net/) mod that adds a `/bed` chat command to teleport players back to their respawn point bed, costing them experience based on distance.
 
 Development of the [Paper](https://papermc.io/) plugin concluded in May of 2021. It is still available on the [paper branch](https://github.com/viral32111/bed-teleport/tree/paper) and [1.0.0 release](https://github.com/viral32111/bed-teleport/releases/tag/1.0.0).
+
+## Usage
+
+1. Download the mod file (`.jar`) from [the latest release](https://github.com/viral32111/bedteleport/releases/latest).
+2. Place the mod file in the server's `mods` directory.
+3. Start the server to initialise the mod for the first time.
+3. Configure appropriately in the `config/viral32111/bedteleport.json` file.
+4. Restart the server.
 
 ## License
 
