@@ -1,11 +1,18 @@
 package com.viral32111.bedteleport
 
+import com.viral32111.bedteleport.config.Configuration
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.fabricmc.api.DedicatedServerModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.nio.file.StandardOpenOption
+import kotlin.io.path.createDirectory
+import kotlin.io.path.notExists
+import kotlin.io.path.readText
+import kotlin.io.path.writeText
 
 @Suppress( "UNUSED" )
 class BedTeleport: DedicatedServerModInitializer {
@@ -24,7 +31,7 @@ class BedTeleport: DedicatedServerModInitializer {
 		const val CONFIGURATION_DIRECTORY_NAME = "viral32111"
 		const val CONFIGURATION_FILE_NAME = "$MOD_ID.json"
 
-		//var configuration = Configuration()
+		var configuration = Configuration()
 
 		/**
 		 * Gets the current version of this mod.
@@ -39,10 +46,10 @@ class BedTeleport: DedicatedServerModInitializer {
 	override fun onInitializeServer() {
 		LOGGER.info( "Bed Teleport v${ getModVersion() } initialized on the server." )
 
-		//configuration = loadConfigurationFile()
+		configuration = loadConfigurationFile()
 	}
 
-	/*private fun loadConfigurationFile(): Configuration {
+	private fun loadConfigurationFile(): Configuration {
 		val serverConfigurationDirectory = FabricLoader.getInstance().configDir
 		val configurationDirectory = serverConfigurationDirectory.resolve( CONFIGURATION_DIRECTORY_NAME )
 		val configurationFile = configurationDirectory.resolve( CONFIGURATION_FILE_NAME )
@@ -68,6 +75,6 @@ class BedTeleport: DedicatedServerModInitializer {
 		LOGGER.info( "Loaded configuration from file '${ configurationFile }'" )
 
 		return config
-	}*/
+	}
 
 }
