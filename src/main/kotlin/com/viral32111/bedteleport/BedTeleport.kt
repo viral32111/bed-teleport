@@ -11,27 +11,21 @@ import net.fabricmc.api.DedicatedServerModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.block.BedBlock
 import net.minecraft.block.Blocks
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
-import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.awt.TrayIcon.MessageType
 import java.nio.file.StandardOpenOption
-import java.rmi.registry.Registry
 import java.util.*
 import kotlin.io.path.createDirectory
 import kotlin.io.path.notExists
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
-import kotlin.math.absoluteValue
-import kotlin.math.max
 import kotlin.math.sqrt
 
 @Suppress( "UNUSED" )
@@ -136,17 +130,17 @@ class BedTeleport: DedicatedServerModInitializer {
 					LOGGER.warn( "Player '${ player.name.string }' (${ player.uuidAsString }) attempted teleport to obstructed bed [ ${ bedPosition.x }, ${ bedPosition.y }, ${ bedPosition.z } ]." )
 					return@executes 0
 				}
-				LOGGER.info( "safeTeleportPosition: [ ${ safeTeleportPosition.x }, ${ safeTeleportPosition.y }, ${ safeTeleportPosition.z } ]" )
+				//LOGGER.info( "safeTeleportPosition: [ ${ safeTeleportPosition.x }, ${ safeTeleportPosition.y }, ${ safeTeleportPosition.z } ]" )
 
 				val distance = sqrt( bedPosition.getSquaredDistance( player.blockPos ) ).toInt()
 				val shouldChargeExperience = configuration.experienceCost.enabled
 				val distanceFree = configuration.experienceCost.distanceFree
 				val experienceCost = if ( shouldChargeExperience && distance > distanceFree ) distance / configuration.experienceCost.perBlocks else 0
-				LOGGER.info( "experienceCost: $experienceCost | player.totalExperience: ${ player.totalExperience } | distance: $distance | distanceFree: $distanceFree" )
+				//LOGGER.info( "experienceCost: $experienceCost | player.totalExperience: ${ player.totalExperience } | distance: $distance | distanceFree: $distanceFree" )
 
 				if ( experienceCost > 0 ) {
 					val requiredExperience = ( experienceCost - player.totalExperience ).coerceAtLeast( 0 )
-					LOGGER.info( "requiredExperience: $requiredExperience" )
+					//LOGGER.info( "requiredExperience: $requiredExperience" )
 
 					if ( requiredExperience > 0 ) {
 						player.sendMessage( Text.literal( "You do not have enough experience to teleport $distance block(s)! You need $requiredExperience more experience." ) )
