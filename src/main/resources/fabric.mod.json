@@ -28,10 +28,7 @@
 			"value": "com.viral32111.bedteleport.BedTeleport"
 		} ]
 	},
-	"mixins": [ {
-		"environment": "server",
-		"config": "bedteleport.mixins.json"
-	} ],
+	"mixins": [],
 
 	"depends": {
 		"java": ">=${ java }",

@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Delays(
-	@Required @SerialName( "activation" ) val activation: Float = 5.0f,
-	@Required @SerialName( "cooldown" ) val cooldown: Float = 120.0f
+	@Required @SerialName( "activation" ) val activation: Int = 5,
+	@Required @SerialName( "cooldown" ) val cooldown: Int = 120
 )

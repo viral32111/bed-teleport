@@ -7,5 +7,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ExperienceCost(
 	@Required @SerialName( "enabled" ) val enabled: Boolean = true,
-	@Required @SerialName( "distance-multiplier" ) val distanceMultiplier: Float = 1.0f,
+	@Required @SerialName( "per-blocks" ) val perBlocks: Int = 10,
+	@Required @SerialName( "distance-free" ) val distanceFree: Int = 50
 )
