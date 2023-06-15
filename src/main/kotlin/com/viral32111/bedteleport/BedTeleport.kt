@@ -110,17 +110,21 @@ class BedTeleport: DedicatedServerModInitializer {
 				val world = context.source.world
 				val bedPosition = player.spawnPointPosition
 
+				if ( player.world.registryKey != player.spawnPointDimension ) {
+					player.sendMessage( Text.literal( "Your bed is in a different dimension!" )  )
+					LOGGER.warn( "Player '${ player.name.string }' (${ player.uuidAsString }) in dimension '${ player.world.registryKey.value.namespace }:${ player.world.registryKey.value.path }' attempted teleport to bed in dimension '${ player.spawnPointDimension.value.namespace }:${ player.spawnPointDimension.value.path }'." )
+					return@executes 0
+				}
+
 				if ( bedPosition == null ) {
 					player.sendMessage( Text.literal( "You have not set your respawn point in a bed!" ) )
 					LOGGER.warn( "Player '${ player.name.string }' (${ player.uuidAsString }) attempted teleport with no bed." )
 					return@executes 0
-				} else if ( !bedBlocks.contains( world.getBlockState( bedPosition ).block ) ) {
+				}
+
+				if ( !bedBlocks.contains( world.getBlockState( bedPosition ).block ) ) {
 					player.sendMessage( Text.literal( "Your bed is destroyed!" )  )
 					LOGGER.warn( "Player '${ player.name.string }' (${ player.uuidAsString }) attempted teleport to destroyed bed [ ${ bedPosition.x }, ${ bedPosition.y }, ${ bedPosition.z } ]." )
-					return@executes 0
-				} else if ( player.world.registryKey != player.spawnPointDimension ) {
-					player.sendMessage( Text.literal( "Your bed is in a different dimension!" )  )
-					LOGGER.warn( "Player '${ player.name.string }' (${ player.uuidAsString }) in dimension '${ player.world.registryKey.value.namespace }:${ player.world.registryKey.value.path }' attempted teleport to bed [ ${ bedPosition.x }, ${ bedPosition.y }, ${ bedPosition.z } ] in dimension '${ player.spawnPointDimension.value.namespace }:${ player.spawnPointDimension.value.path }'." )
 					return@executes 0
 				}
 
