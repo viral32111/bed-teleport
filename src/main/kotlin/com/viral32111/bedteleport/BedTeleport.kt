@@ -17,6 +17,7 @@ import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
@@ -180,7 +181,7 @@ class BedTeleport: DedicatedServerModInitializer {
 			LOGGER.debug( "Player '${ player.name.string }' (${ player.uuidAsString}) will be teleported to [ ${ centeredTeleportPosition.x }, ${ centeredTeleportPosition.y }, ${ centeredTeleportPosition.z } ]." )
 
 			player.serverWorld.server.execute {
-				LOGGER.debug( "Entered main server thread..." )
+				LOGGER.debug( "Entered main server thread." )
 
 				player.teleport( player.serverWorld, centeredTeleportPosition.x, centeredTeleportPosition.y, centeredTeleportPosition.z, player.yaw, player.pitch )
 				player.refreshPositionAfterTeleport( centeredTeleportPosition )
@@ -196,12 +197,10 @@ class BedTeleport: DedicatedServerModInitializer {
 
 				if ( experienceCost > 0 ) {
 					player.serverWorld.server.execute {
-						LOGGER.debug( "Entered main server thread..." )
+						LOGGER.debug( "Entered main server thread." )
 
 						player.addExperience( -experienceCost )
-						player.playSound( SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f )
-						//world.playSound( null, player.blockPos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 1.0f )
-						//world.playSound( null, safeTeleportPosition, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 1.0f )
+						world.playSound( null, safeTeleportPosition, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1.0f, 1.0f )
 
 						LOGGER.debug( "Player '${ player.name.string }' (${ player.uuidAsString}) was charged $experienceCost experience." )
 					}
