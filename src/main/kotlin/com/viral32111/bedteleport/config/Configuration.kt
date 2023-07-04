@@ -1,11 +1,11 @@
 package com.viral32111.bedteleport.config
 
-import kotlinx.serialization.Required
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Configuration(
-	@Required @SerialName( "experience-cost" ) val experienceCost: ExperienceCost = ExperienceCost(),
-	@Required @SerialName( "delays" ) val delays: Delays = Delays()
+	@SerialName( "command-name" ) val commandName: String = "bed",
+	@SerialName( "experience-cost" ) val experienceCost: ExperienceCost = ExperienceCost(),
+	val delays: Delays = Delays()
 )
