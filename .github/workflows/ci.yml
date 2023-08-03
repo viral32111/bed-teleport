@@ -3,9 +3,9 @@ name: CI
 on:
   push:
     paths:
-      - 'gradle/**'
+      - 'gradle/**/*'
       - 'gradle*'
-      - 'src/**'
+      - 'src/**/*'
       - '*.gradle.kts'
       - 'gradle.properties'
       - '.github/workflows/ci.yml'
@@ -36,7 +36,7 @@ jobs:
           distribution: temurin
 
       - name: Set Gradle permissions
-        run: chmod +x ./gradlew
+        run: chmod +x gradlew
 
       - name: Build project
         uses: gradle/gradle-build-action@v2
@@ -51,13 +51,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ./build/libs/*.jar
+          path: build/libs/*.jar
 
   release:
     name: Release
     runs-on: ubuntu-22.04
     needs: build
-    if: ${{ github.event_name == 'push' && github.ref_type == 'tag' && !startsWith( github.ref, 'refs/heads/dependabot/' ) }}
+    if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
     permissions:
       contents: write
     steps:
@@ -68,13 +68,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ./artifact/
+          path: artifact
 
       - name: Create draft release
         uses: softprops/action-gh-release@v1
         with:
           draft: true
           tag_name: ${{ github.ref_name }}
-          body: ${{ github.ref_name }}
-          files: ./artifact/*.jar
+          files: artifact/*.jar
           token: ${{ secrets.GITHUB_TOKEN }}
